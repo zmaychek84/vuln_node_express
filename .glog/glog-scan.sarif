@@ -10,7 +10,186 @@
           "version": "1.0.0",
           "semanticVersion": "1.0.0",
           "informationUri": "https://www.glog.ai",
-          "rules": [],
+          "rules": [
+            {
+              "id": "45b39089-de4d-3ff0-bb31-7aa4daed69f0",
+              "name": "\"Exposure of Error Details Vulnerability\"",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nExposure of Error Details Vulnerability in JavaScript refers to the situation where an application provides too much information in error messages. This can lead to potential security risks as it can provide attackers with valuable information about the system, such as the structure of your database, the technology you're using, or even the logic of your code. In the given code snippet, `res.json(err);` is sending the entire error object to the client, which can expose sensitive information.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to handle errors properly and not to expose any sensitive information in error messages. Instead of sending the entire error object to the client, you should send a custom error message. \n\n## Source Code Fix Recommendation\n\nInstead of:\n\n```javascript\nres.json(err);\n```\n\nYou should use:\n\n```javascript\nres.status(500).json({ message: 'An error occurred, please try again later.' });\n```\n\nThis way, you're not exposing any sensitive information about your system.\n\n## Library Dependencies\n\nThe code example provided uses the `express` library in Node.js.\n\n## References\n\n- [OWASP Error Handling](https://cheatsheetseries.owasp.org/cheatsheets/Error_Handling_Cheat_Sheet.html)\n- [CWE-209: Information Exposure Through an Error Message](https://cwe.mitre.org/data/definitions/209.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-209",
+                    "url": "https://cwe.mitre.org/data/definitions/209.html"
+                  }
+                ],
+                "severity": "MEDIUM",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-209"
+                ]
+              }
+            },
+            {
+              "id": "f38cd758-24f7-3872-95cf-ae24840f66da",
+              "name": "\"Missing CSRF Middleware in Express Application\"",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nCross-Site Request Forgery (CSRF) is a type of attack that occurs when a malicious web site, email, blog, instant message, or program causes a user's web browser to perform an unwanted action on a trusted site for which the user is currently authenticated. If the Express application does not use CSRF middleware, it is vulnerable to this type of attack.\n\n## Mitigation Advice\n\nTo mitigate CSRF attacks, you should use CSRF protection middleware such as `csurf`. This middleware creates a CSRF token that must be included in requests that mutate state. Without the token, the request will not be accepted.\n\n## Source Code Fix Recommendation\n\nFirst, install the `csurf` middleware:\n\n```bash\nnpm install csurf\n```\n\nThen, use it in your Express application:\n\n```javascript\nvar express = require('express');\nvar cookieParser = require('cookie-parser');\nvar csrf = require('csurf');\n\nvar csrfProtection = csrf({ cookie: true });\nvar app = express();\n\napp.use(cookieParser());\n\n// Add this line to routes that need CSRF protection\napp.post('/process', csrfProtection, function(req, res) {\n  // Process request\n});\n```\n\n## Library Dependencies\n\n- express\n- cookie-parser\n- csurf\n\n## References\n\n- [OWASP CSRF Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html)\n- [CWE-352: Cross-Site Request Forgery (CSRF)](https://cwe.mitre.org/data/definitions/352.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-352",
+                    "url": "https://cwe.mitre.org/data/definitions/352.html"
+                  }
+                ],
+                "severity": "MEDIUM",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-352"
+                ]
+              }
+            },
+            {
+              "id": "3d9d61a3-a174-3dd7-8804-c2426c60bde2",
+              "name": "'GET' requests are managed by the '/search' HTTP route in Express.",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe vulnerability in this code lies in the fact that user input is directly used in a search query without any form of sanitization or validation. This can lead to a variety of attacks, most notably SQL Injection, where an attacker can manipulate the search query to retrieve, modify, or delete data from the database.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to always validate and sanitize user input before using it in any form of query or command. This can be done using various methods, such as using prepared statements, using a safe API, or using ORM libraries.\n\n## Source Code Fix Recommendation\n\nHere is a fixed version of the code:\n\n```javascript\nconst express = require('express');\nconst router = express.Router();\nconst searchService = require('./searchService'); // Assuming searchService is in the same directory\n\nrouter.get('/search', function (req, res, next) {\n  const searchText = req.query.searchText !== undefined ? req.query.searchText : '';\n  console.log(req.query);\n  console.log('search text: ' + searchText);\n\n  // Sanitize the searchText before using it in the search query\n  const sanitizedSearchText = searchText.replace(/[^a-zA-Z0-9 ]/g, \"\");\n\n  searchService.searchByName(sanitizedSearchText, function (err, ret) {\n    if (err) {\n      res.json(err);\n    } else {\n      delete ret.searchText;\n      res.json(ret);\n    }\n  });\n});\n\nmodule.exports = router;\n```\n\n## Library Dependencies\n\nThe code example requires the following library dependencies to execute properly:\n\n- express\n- searchService (Assuming it's a custom module)\n\n## References\n\n- [OWASP SQL Injection Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html)\n- [CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')](https://cwe.mitre.org/data/definitions/89.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-89",
+                    "url": "https://cwe.mitre.org/data/definitions/89.html"
+                  }
+                ],
+                "severity": "MEDIUM",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-89"
+                ]
+              }
+            },
+            {
+              "id": "95ee0425-1977-357b-8e3f-3196f51c7619",
+              "name": "\"HTTP route '/' handling GET requests\"",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe provided JavaScript code snippet is a simple Express.js route handler for HTTP GET requests to the root URL (\"/\"). This code does not have any direct vulnerabilities. However, if the 'index' view or the 'VulnyJS' title is not properly handled or sanitized, it could potentially lead to Cross-Site Scripting (XSS) vulnerabilities.\n\n## Mitigation Advice\n\nTo mitigate potential XSS vulnerabilities, ensure that any user-supplied data is properly escaped or sanitized before it is rendered in the view. This includes any data that is included in the 'index' view or the 'VulnyJS' title.\n\n## Source Code Fix Recommendation\n\nThe Express.js framework automatically escapes all variable content when rendering views, so no changes are necessary in this specific code snippet. However, if you are using a different view engine or rendering user-supplied data in other parts of your application, you should ensure that the data is properly escaped or sanitized.\n\n## Library Dependencies\n\nThe provided code snippet requires the following library dependencies:\n\n- express\n- any view engine compatible with Express.js (e.g., pug, ejs, etc.)\n\n## OWASP Resources\n\n- [OWASP Cross-Site Scripting (XSS)](https://owasp.org/www-community/attacks/xss/)\n- [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n\n## Common Weakness Enumeration (CWE)\n\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-79",
+                    "url": "https://cwe.mitre.org/data/definitions/79.html"
+                  }
+                ],
+                "severity": "MEDIUM",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-79"
+                ]
+              }
+            },
+            {
+              "id": "7d0e3f23-5d55-3873-85c7-74ce2f4651b8",
+              "name": "Sensitive Data Exposure in API Response",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nSensitive Data Exposure in API Response is a vulnerability that occurs when an API unintentionally exposes sensitive information in its responses. This can happen when developers include sensitive data in the response objects without proper filtering or sanitization. In JavaScript, this can occur when using the `res.json()` function to send JSON responses without properly checking the data being sent.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, developers should:\n\n- Always validate, filter, and sanitize data before sending it in a response.\n- Implement proper access controls to ensure that only authorized users can access sensitive data.\n- Use encryption to protect sensitive data in transit and at rest.\n- Avoid storing sensitive data unnecessarily. If you must store sensitive data, it should be encrypted and securely managed.\n- Regularly review and update your security configurations and controls.\n\n## Source Code Fix Recommendation\n\nIf `ret` contains sensitive data, you should remove or anonymize this data before sending the response. For example:\n\n```javascript\n// Assuming ret is an object with sensitive data in 'password' field\ndelete ret.password;\nres.json(ret);\n```\n\nOr, if you need to return only specific fields, you can create a new object with only these fields:\n\n```javascript\nres.json({\n  username: ret.username,\n  email: ret.email,\n  // other non-sensitive fields...\n});\n```\n\n## Library Dependencies\n\nThe code example provided uses the `res.json()` function, which is part of the Express.js library. Therefore, the Express.js library is required for the code to execute properly.\n\n## References\n\n- [OWASP API Security: Data Exposure](https://owasp.org/www-project-api-security/)\n- [OWASP Top 10-2017 A3-Sensitive Data Exposure](https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure)\n- [CWE-200: Information Exposure](https://cwe.mitre.org/data/definitions/200.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-200",
+                    "url": "https://cwe.mitre.org/data/definitions/200.html"
+                  }
+                ],
+                "severity": "MEDIUM",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-200"
+                ]
+              }
+            },
+            {
+              "id": "8be670c1-e0be-3e0b-a04e-0b3541af700f",
+              "name": "'/' HTTP route in Express handles post requests.",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe provided JavaScript code is an Express.js route handler for POST requests to the root ('/') URL. The vulnerability in this code is that it does not validate or sanitize the `searchText` input from the request body before passing it to the `searchService.searchByName` function. This could potentially lead to security issues such as SQL Injection or Cross-Site Scripting (XSS) if the `searchService.searchByName` function interacts with a database or renders the input in a web page without proper escaping.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, you should always validate and sanitize user inputs before using them. This can be done using various libraries such as `express-validator` for validation and `sanitize-html` for sanitization.\n\n## Source Code Fix\n\nHere is a fixed version of the code using `express-validator` and `sanitize-html`:\n\n```javascript\nconst { body, validationResult } = require('express-validator');\nconst sanitizeHtml = require('sanitize-html');\n\nrouter.post('/',\n  body('searchText').trim().escape(),\n  function (req, res, next) {\n    const errors = validationResult(req);\n    if (!errors.isEmpty()) {\n      return res.status(400).json({ errors: errors.array() });\n    }\n\n    const searchText = sanitizeHtml(req.body.searchText);\n\n    searchService.searchByName(searchText, function (err, ret) {\n      if (err) {\n        res.redirect('/search')\n      } else {\n        res.render('searchResult', ret)\n      }\n    });\n  }\n);\n```\n\n## Library Dependencies\n\nThe code example requires the following library dependencies:\n\n- `express`\n- `express-validator`\n- `sanitize-html`\n\n## References\n\n- [OWASP Input Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html)\n- [OWASP Cross-Site Scripting (XSS)](https://owasp.org/www-community/attacks/xss/)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)\n- [CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')](https://cwe.mitre.org/data/definitions/89.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-79",
+                    "url": "https://cwe.mitre.org/data/definitions/79.html"
+                  },
+                  {
+                    "id": "CWE-89",
+                    "url": "https://cwe.mitre.org/data/definitions/89.html"
+                  }
+                ],
+                "severity": "MEDIUM",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-79",
+                  "CWE-89"
+                ]
+              }
+            },
+            {
+              "id": "2076eb0f-7423-3ae1-9227-13158728d8a6",
+              "name": "'/' HTTP route in Express handles GET requests.",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe provided code snippet is an Express.js route handler for the root URL (\"/\") using the HTTP GET method. This code does not have any apparent security vulnerabilities. It simply renders a view called 'search' and passes an object with a 'title' property to the view.\n\nHowever, Express.js applications can be vulnerable to various types of attacks if not properly secured. For example, they can be susceptible to Cross-Site Scripting (XSS), Cross-Site Request Forgery (CSRF), SQL Injection, and other types of attacks.\n\n## Mitigation Advice\n\nTo mitigate potential vulnerabilities in Express.js applications:\n\n1. Always validate and sanitize user input to prevent injection attacks.\n2. Use HTTP headers to secure your application. For example, use the helmet.js library to set many common security headers.\n3. Use cookies securely. Set the httpOnly flag to prevent XSS attacks and the secure flag to ensure cookies are only sent over HTTPS.\n4. Implement rate limiting to prevent brute-force attacks.\n5. Use the csurf library to protect against CSRF attacks.\n\n## Code Fix\n\nThe provided code does not have any apparent vulnerabilities, so no code fix is necessary.\n\n## Dependencies\n\nThe provided code requires the following dependencies:\n\n- express\n- pug (or any other view engine supported by Express)\n\n## References\n\n- [CWE for Injection](https://cwe.mitre.org/data/definitions/77.html)\n- [CWE for Cross-Site Scripting](https://cwe.mitre.org/data/definitions/79.html)\n- [CWE for Cross-Site Request Forgery](https://cwe.mitre.org/data/definitions/352.html)"
+              },
+              "properties": {
+                "cwe": [],
+                "severity": "MEDIUM",
+                "kind": "FAIL"
+              }
+            },
+            {
+              "id": "9186e82f-f5f0-3a35-a5d8-de28048f6e4b",
+              "name": "XSS Vulnerability in User-Controlled HTML Data",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nCross-Site Scripting (XSS) vulnerabilities occur when an application includes untrusted data in a new web page without proper validation or escaping, or updates an existing web page with user-supplied data using a browser API that can create HTML or JavaScript. XSS allows attackers to execute scripts in the victim's browser which can hijack user sessions, deface web sites, or redirect the user to malicious sites.\n\nIn the provided JavaScript code, the vulnerability lies in the SQL query where user input (`searchText`) is directly concatenated into the query string. This not only opens up the possibility for SQL Injection attacks, but also for XSS attacks if the returned data is used in a web page without proper escaping.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, you should:\n\n1. Use parameterized queries or prepared statements instead of string concatenation within your query. This will prevent SQL Injection attacks.\n2. Always validate and sanitize user input to ensure it does not contain malicious code.\n3. Use proper output encoding when displaying user-controlled data on a web page to prevent XSS attacks.\n\n## Source Code Fix\n\nHere is a recommended fix for the provided code:\n\n```javascript\ndb.all(\"select id,name,description from item where name like ?\", ['%' + searchText + '%'], function (err, rows) {\n  if (err) {\n    console.log('error ' + err);\n    cb(err);\n  } else {\n    console.log('rows? ' + rows);\n    console.log('got ' + rows.length + ' rows');\n    const ret = {\n      searchText: searchText,\n      rows: rows\n    };\n    cb(null, ret);\n  }\n});\n```\n\n## Library Dependencies\n\nThe provided code seems to be using the `sqlite3` library for Node.js.\n\n## References\n\n- [OWASP XSS (Cross Site Scripting) Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [OWASP SQL Injection Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)\n- [CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')](https://cwe.mitre.org/data/definitions/89.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-79",
+                    "url": "https://cwe.mitre.org/data/definitions/79.html"
+                  },
+                  {
+                    "id": "CWE-89",
+                    "url": "https://cwe.mitre.org/data/definitions/89.html"
+                  }
+                ],
+                "severity": "MEDIUM",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-79",
+                  "CWE-89"
+                ]
+              }
+            }
+          ],
           "language": "en-US",
           "contents": [
             "localizedData",
@@ -20,7 +199,288 @@
         }
       },
       "language": "en-US",
-      "results": [],
+      "results": [
+        {
+          "ruleId": "45b39089-de4d-3ff0-bb31-7aa4daed69f0",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Sensitive Data Exposure in API Response"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "routes/api.js",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 12,
+                  "startColumn": 7,
+                  "endLine": 12,
+                  "endColumn": 20,
+                  "snippet": {
+                    "text": "      res.json(err);"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "fad8a9c6dd020adc566a172f62d6625ac500572c5348e8bcfa214cbed4468e61",
+            "glog-pfp-ruleFileCode/v1": "41531fa7b8c24aa2fca1140ced3fc89f9f38dd3e5865752de13af0494cb855df"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "41531fa7b8c24aa2fca1140ced3fc89f9f38dd3e5865752de13af0494cb855df"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "f38cd758-24f7-3872-95cf-ae24840f66da",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "\"Missing CSRF Middleware in Express Application\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "app.js",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 12,
+                  "startColumn": 5,
+                  "endLine": 12,
+                  "endColumn": 20,
+                  "snippet": {
+                    "text": "var app = express();"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "0f6365f13204f7df98ee8430c9b3fd9c593e87d0ab5dbe3af906a120f8a63931",
+            "glog-pfp-ruleFileCode/v1": "90b2b017d756576300e0964cc131ad78e33036d4b028fb457bfe6b97dbdf1cd2"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "90b2b017d756576300e0964cc131ad78e33036d4b028fb457bfe6b97dbdf1cd2"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "3d9d61a3-a174-3dd7-8804-c2426c60bde2",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "'GET' requests are managed by the '/search' HTTP route in Express."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "routes/api.js",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 5,
+                  "startColumn": 1,
+                  "endLine": 19,
+                  "endColumn": 3,
+                  "snippet": {
+                    "text": "router.get('/search', function (req, res, next) {\n\n  const searchText = req.query.searchText !== undefined ? req.query.searchText : '';\n  console.log(req.query);\n  console.log('search text: ' + searchText);\n  searchService.searchByName(searchText, function (err, ret) {\n    if (err) {\n      res.json(err);\n    } else {\n      delete ret.searchText;\n      res.json(ret);\n    }\n  });\n\n});"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "a09523869abc0183905b5b439c6b919a3684f439b23fe4fe42d8f9de707742ad",
+            "glog-pfp-ruleFileCode/v1": "98a851f8f79ff755a49fd981a37e58c712063242b97979388fda4e687f2e0e5b"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "98a851f8f79ff755a49fd981a37e58c712063242b97979388fda4e687f2e0e5b"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "7d0e3f23-5d55-3873-85c7-74ce2f4651b8",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "\"Exposure of Error Details Vulnerability\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "routes/api.js",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 15,
+                  "startColumn": 7,
+                  "endLine": 15,
+                  "endColumn": 20,
+                  "snippet": {
+                    "text": "      res.json(ret);"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "735d4e2de4eb55c7f9508d638aff3b7916d3e395df345508bc7d69ce6a5b7da6",
+            "glog-pfp-ruleFileCode/v1": "a87548d8993508a2df8ad4bfb5338030e4702d5c7d302b328505627c6c81341a"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "a87548d8993508a2df8ad4bfb5338030e4702d5c7d302b328505627c6c81341a"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "95ee0425-1977-357b-8e3f-3196f51c7619",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "\"HTTP route '/' handling GET requests\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "routes/index.js",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 5,
+                  "startColumn": 1,
+                  "endLine": 7,
+                  "endColumn": 3,
+                  "snippet": {
+                    "text": "router.get('/', function(req, res, next) {\n  res.render('index', { title: 'VulnyJS' });\n});"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "7ac5a67cac87b62c71f0cb1f65f048463a791afc0a198142b1c84461954ca9e2",
+            "glog-pfp-ruleFileCode/v1": "c3ba0ee9872f1887e84837eaaf81367b3c94a2c19864da53f4368d4bbcde1ee3"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "c3ba0ee9872f1887e84837eaaf81367b3c94a2c19864da53f4368d4bbcde1ee3"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "8be670c1-e0be-3e0b-a04e-0b3541af700f",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "'/' HTTP route in Express handles post requests."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "routes/search.js",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 10,
+                  "startColumn": 1,
+                  "endLine": 20,
+                  "endColumn": 3,
+                  "snippet": {
+                    "text": "router.post('/', function (req, res, next) {\n  const searchText = req.body.searchText;\n\n  searchService.searchByName(searchText, function (err, ret) {\n    if (err) {\n      res.redirect('/search')\n    } else {\n      res.render('searchResult', ret)\n    }\n  });\n});"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "4e29a449c96935165a12eb7927927642b1bdcf926cf51d926e3948d52c75fd1a",
+            "glog-pfp-ruleFileCode/v1": "21a21d859f505817fa8cb0367579f1cd4fe737994a860a91a674f9d0c47a6cc4"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "21a21d859f505817fa8cb0367579f1cd4fe737994a860a91a674f9d0c47a6cc4"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "2076eb0f-7423-3ae1-9227-13158728d8a6",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "'/' HTTP route in Express handles GET requests."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "routes/search.js",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 6,
+                  "startColumn": 1,
+                  "endLine": 8,
+                  "endColumn": 3,
+                  "snippet": {
+                    "text": "router.get('/', function (req, res, next) {\n  res.render('search', {title: 'Search for items'});\n});"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "15b690e23b1c4f56a821a7d5aef05656ca75a09ad8e7368aeb0c436a30b317ca",
+            "glog-pfp-ruleFileCode/v1": "c3dc24bc0e5dbc1d47d12bee18553c31edcc42188c7c633b8c081ed099ff168a"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "c3dc24bc0e5dbc1d47d12bee18553c31edcc42188c7c633b8c081ed099ff168a"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "9186e82f-f5f0-3a35-a5d8-de28048f6e4b",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "XSS Vulnerability in User-Controlled HTML Data"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "service/search.js",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 6,
+                  "startColumn": 3,
+                  "endLine": 23,
+                  "endColumn": 6,
+                  "snippet": {
+                    "text": "  db.all(\"select id,name,description from item where name like '%\" + searchText + \"%'\", [], function (err, rows) {\n  //db.all(\"select id,name,description from item where name like '%?%'\", [searchText], function (err, rows) {\n    if (err) {\n      console.log('error ' + err);\n      cb(err);\n      //res.redirect('/search')\n    } else {\n      //console.log(req.body);\n      console.log('rows? ' + rows);\n      console.log('got ' + rows.length + ' rows');\n      const ret = {\n        searchText: searchText,\n        rows: rows\n      };\n      cb(null, ret);\n      //res.render('searchResult', ret)\n    }\n  });"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "567326c82b1898dffd68f754e5a631674c24935686b6f4e21234cafc6fbafef7",
+            "glog-pfp-ruleFileCode/v1": "be5eb0f080937cc0eac48a581d61aae3886c6d7f78bb08dee06f1aabad23053c"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "be5eb0f080937cc0eac48a581d61aae3886c6d7f78bb08dee06f1aabad23053c"
+          },
+          "properties": {}
+        }
+      ],
       "newlineSequences": [
         "\r\n",
         "\n"
