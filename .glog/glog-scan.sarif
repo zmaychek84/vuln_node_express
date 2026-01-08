@@ -12,28 +12,6 @@
           "informationUri": "https://www.glog.ai",
           "rules": [
             {
-              "id": "45b39089-de4d-3ff0-bb31-7aa4daed69f0",
-              "name": "\"Exposure of Error Details Vulnerability\"",
-              "helpUri": "https://www.glog.ai/",
-              "help": {
-                "text": "",
-                "markdown": "## Description\n\nExposure of Error Details Vulnerability in JavaScript refers to the situation where an application provides too much information in error messages. This can lead to potential security risks as it can provide attackers with valuable information about the system, such as the structure of your database, the technology you're using, or even the logic of your code. In the given code snippet, `res.json(err);` is sending the entire error object to the client, which can expose sensitive information.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to handle errors properly and not to expose any sensitive information in error messages. Instead of sending the entire error object to the client, you should send a custom error message. \n\n## Source Code Fix Recommendation\n\nInstead of:\n\n```javascript\nres.json(err);\n```\n\nYou should use:\n\n```javascript\nres.status(500).json({ message: 'An error occurred, please try again later.' });\n```\n\nThis way, you're not exposing any sensitive information about your system.\n\n## Library Dependencies\n\nThe code example provided uses the `express` library in Node.js.\n\n## References\n\n- [OWASP Error Handling](https://cheatsheetseries.owasp.org/cheatsheets/Error_Handling_Cheat_Sheet.html)\n- [CWE-209: Information Exposure Through an Error Message](https://cwe.mitre.org/data/definitions/209.html)"
-              },
-              "properties": {
-                "cwe": [
-                  {
-                    "id": "CWE-209",
-                    "url": "https://cwe.mitre.org/data/definitions/209.html"
-                  }
-                ],
-                "severity": "MEDIUM",
-                "kind": "FAIL",
-                "tags": [
-                  "CWE-209"
-                ]
-              }
-            },
-            {
               "id": "f38cd758-24f7-3872-95cf-ae24840f66da",
               "name": "\"Missing CSRF Middleware in Express Application\"",
               "helpUri": "https://www.glog.ai/",
@@ -52,6 +30,28 @@
                 "kind": "FAIL",
                 "tags": [
                   "CWE-352"
+                ]
+              }
+            },
+            {
+              "id": "45b39089-de4d-3ff0-bb31-7aa4daed69f0",
+              "name": "Sensitive Data Exposure in API Response",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nSensitive Data Exposure in API Response is a vulnerability that occurs when an application unintentionally exposes sensitive information in its responses. This can happen when an application does not properly validate or sanitize the data it sends in its responses. In JavaScript, this can occur when using the `res.json()` function to send error information back to the client. If the error object contains sensitive information, such as database details, user credentials, or other confidential data, and this is not properly handled, it can lead to a data breach.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to avoid sending raw error objects in the response. Instead, log the error details on the server side and send a generic error message to the client. This way, you can avoid exposing any sensitive information.\n\n## Source Code Fix Recommendation\n\nInstead of sending the raw error object, you can send a custom error message:\n\n```javascript\n// Instead of this\nres.json(err);\n\n// Do this\nres.json({ message: 'An error occurred, please try again later.' });\n```\n\n## Library Dependencies\n\nThe code example provided requires the Express.js library to execute properly.\n\n## References\n\n- [OWASP API Security: Data Exposure](https://owasp.org/www-project-api-security/)\n- [OWASP Top 10-2017 A3-Sensitive Data Exposure](https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure)\n- [CWE-209: Information Exposure Through an Error Message](https://cwe.mitre.org/data/definitions/209.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-209",
+                    "url": "https://cwe.mitre.org/data/definitions/209.html"
+                  }
+                ],
+                "severity": "MEDIUM",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-209"
                 ]
               }
             },
@@ -101,24 +101,38 @@
             },
             {
               "id": "7d0e3f23-5d55-3873-85c7-74ce2f4651b8",
-              "name": "Sensitive Data Exposure in API Response",
+              "name": "\"Exposure of Error Details Vulnerability\"",
               "helpUri": "https://www.glog.ai/",
               "help": {
                 "text": "",
-                "markdown": "## Description\n\nSensitive Data Exposure in API Response is a vulnerability that occurs when an API unintentionally exposes sensitive information in its responses. This can happen when developers include sensitive data in the response objects without proper filtering or sanitization. In JavaScript, this can occur when using the `res.json()` function to send JSON responses without properly checking the data being sent.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, developers should:\n\n- Always validate, filter, and sanitize data before sending it in a response.\n- Implement proper access controls to ensure that only authorized users can access sensitive data.\n- Use encryption to protect sensitive data in transit and at rest.\n- Avoid storing sensitive data unnecessarily. If you must store sensitive data, it should be encrypted and securely managed.\n- Regularly review and update your security configurations and controls.\n\n## Source Code Fix Recommendation\n\nIf `ret` contains sensitive data, you should remove or anonymize this data before sending the response. For example:\n\n```javascript\n// Assuming ret is an object with sensitive data in 'password' field\ndelete ret.password;\nres.json(ret);\n```\n\nOr, if you need to return only specific fields, you can create a new object with only these fields:\n\n```javascript\nres.json({\n  username: ret.username,\n  email: ret.email,\n  // other non-sensitive fields...\n});\n```\n\n## Library Dependencies\n\nThe code example provided uses the `res.json()` function, which is part of the Express.js library. Therefore, the Express.js library is required for the code to execute properly.\n\n## References\n\n- [OWASP API Security: Data Exposure](https://owasp.org/www-project-api-security/)\n- [OWASP Top 10-2017 A3-Sensitive Data Exposure](https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure)\n- [CWE-200: Information Exposure](https://cwe.mitre.org/data/definitions/200.html)"
+                "markdown": "## Description\n\nExposure of Error Details Vulnerability in JavaScript refers to the situation where an application provides too much information in error messages. This can lead to potential security risks as attackers can use this information to gain insights about the system, its structure, or its weaknesses. \n\nIn the given code snippet, `res.json(ret);` is potentially vulnerable if `ret` contains sensitive error details that should not be exposed to the client.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to handle errors properly and avoid sending detailed error information to the client. Instead, log the detailed error information server-side where it can be used for debugging and send a generic error message to the client.\n\n## Source Code Fix Recommendation\n\n```javascript\ntry {\n    // some code that might throw an error\n} catch (error) {\n    console.error(error); // log the detailed error server-side\n    res.json({ error: 'An error occurred' }); // send a generic error message to the client\n}\n```\n\n## Library Dependencies\n\nThe code example requires the `express` library to execute properly.\n\n## References\n\n- [OWASP Top 10 - A3:2017-Sensitive Data Exposure](https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure)\n- [CWE-209: Information Exposure Through an Error Message](https://cwe.mitre.org/data/definitions/209.html)"
               },
               "properties": {
                 "cwe": [
                   {
-                    "id": "CWE-200",
-                    "url": "https://cwe.mitre.org/data/definitions/200.html"
+                    "id": "CWE-209",
+                    "url": "https://cwe.mitre.org/data/definitions/209.html"
                   }
                 ],
                 "severity": "MEDIUM",
                 "kind": "FAIL",
                 "tags": [
-                  "CWE-200"
+                  "CWE-209"
                 ]
+              }
+            },
+            {
+              "id": "2076eb0f-7423-3ae1-9227-13158728d8a6",
+              "name": "'/' HTTP route in Express handles GET requests.",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe provided code snippet is an Express.js route handler for the root URL (\"/\") using the HTTP GET method. This code does not have any apparent security vulnerabilities. It simply renders a view called 'search' and passes an object with a 'title' property to the view.\n\nHowever, Express.js applications can be vulnerable to various types of attacks if not properly secured. For example, they can be susceptible to Cross-Site Scripting (XSS), Cross-Site Request Forgery (CSRF), SQL Injection, and other types of attacks.\n\n## Mitigation Advice\n\nTo mitigate potential vulnerabilities in Express.js applications:\n\n1. Always validate and sanitize user input to prevent injection attacks.\n2. Use HTTP headers to secure your application. For example, use the helmet.js library to set many common security headers.\n3. Use cookies securely. Set the httpOnly flag to prevent XSS attacks and the secure flag to ensure cookies are only sent over HTTPS.\n4. Implement rate limiting to prevent brute-force attacks.\n5. Use the csurf library to protect against CSRF attacks.\n\n## Code Fix\n\nThe provided code does not have any apparent vulnerabilities, so no code fix is necessary.\n\n## Dependencies\n\nThe provided code requires the following dependencies:\n\n- express\n- pug (or any other view engine supported by Express)\n\n## References\n\n- [CWE for Injection](https://cwe.mitre.org/data/definitions/77.html)\n- [CWE for Cross-Site Scripting](https://cwe.mitre.org/data/definitions/79.html)\n- [CWE for Cross-Site Request Forgery](https://cwe.mitre.org/data/definitions/352.html)"
+              },
+              "properties": {
+                "cwe": [],
+                "severity": "MEDIUM",
+                "kind": "FAIL"
               }
             },
             {
@@ -149,21 +163,7 @@
               }
             },
             {
-              "id": "2076eb0f-7423-3ae1-9227-13158728d8a6",
-              "name": "'/' HTTP route in Express handles GET requests.",
-              "helpUri": "https://www.glog.ai/",
-              "help": {
-                "text": "",
-                "markdown": "## Description\n\nThe provided code snippet is an Express.js route handler for the root URL (\"/\") using the HTTP GET method. This code does not have any apparent security vulnerabilities. It simply renders a view called 'search' and passes an object with a 'title' property to the view.\n\nHowever, Express.js applications can be vulnerable to various types of attacks if not properly secured. For example, they can be susceptible to Cross-Site Scripting (XSS), Cross-Site Request Forgery (CSRF), SQL Injection, and other types of attacks.\n\n## Mitigation Advice\n\nTo mitigate potential vulnerabilities in Express.js applications:\n\n1. Always validate and sanitize user input to prevent injection attacks.\n2. Use HTTP headers to secure your application. For example, use the helmet.js library to set many common security headers.\n3. Use cookies securely. Set the httpOnly flag to prevent XSS attacks and the secure flag to ensure cookies are only sent over HTTPS.\n4. Implement rate limiting to prevent brute-force attacks.\n5. Use the csurf library to protect against CSRF attacks.\n\n## Code Fix\n\nThe provided code does not have any apparent vulnerabilities, so no code fix is necessary.\n\n## Dependencies\n\nThe provided code requires the following dependencies:\n\n- express\n- pug (or any other view engine supported by Express)\n\n## References\n\n- [CWE for Injection](https://cwe.mitre.org/data/definitions/77.html)\n- [CWE for Cross-Site Scripting](https://cwe.mitre.org/data/definitions/79.html)\n- [CWE for Cross-Site Request Forgery](https://cwe.mitre.org/data/definitions/352.html)"
-              },
-              "properties": {
-                "cwe": [],
-                "severity": "MEDIUM",
-                "kind": "FAIL"
-              }
-            },
-            {
-              "id": "9186e82f-f5f0-3a35-a5d8-de28048f6e4b",
+              "id": "64e7a50a-f7bf-34fb-a50d-4d679389c46c",
               "name": "XSS Vulnerability in User-Controlled HTML Data",
               "helpUri": "https://www.glog.ai/",
               "help": {
@@ -186,6 +186,270 @@
                 "tags": [
                   "CWE-79",
                   "CWE-89"
+                ]
+              }
+            },
+            {
+              "id": "65d25286-3b53-3677-b17f-f907deb00fda",
+              "name": "Critical Vulnerability in JSON-Schema Version 0.2.3, Fixed in Version 0.4.0 (CVE-2021-3918)",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe JSON-Schema library version 0.2.3 in Docker has a critical vulnerability (CVE-2021-3918) that allows for Prototype Pollution. Prototype Pollution refers to the ability to modify a JavaScript object's prototype. This can lead to several types of security vulnerabilities, such as adding unexpected properties, changing existing properties, or even remote code execution.\n\n## Security Concern\n\nThis vulnerability is a security concern because an attacker can manipulate the application's behavior by injecting properties into existing JavaScript language construct prototypes. This can lead to various security issues, such as denial of service, data manipulation, or even remote code execution if the application logic depends on the polluted properties.\n\n## Mitigation Advice\n\nThe best way to mitigate this vulnerability is to upgrade the JSON-Schema library to version 0.4.0 or later, which has fixed this vulnerability. If upgrading is not an option, you should consider using a different library that does not have this vulnerability.\n\n## Source Code Fix Recommendation\n\nTo fix this vulnerability, you need to update the JSON-Schema library in your `package.json` file:\n\n```json\n\"dependencies\": {\n  \"json-schema\": \"^0.4.0\"\n}\n```\n\nThen, run `npm install` to install the updated version of the library.\n\n## Library Dependencies\n\nThe code example requires the JSON-Schema library to execute properly.\n\n## References\n\n- [OWASP Top 10 - A1:2017-Injection](https://owasp.org/www-project-top-ten/2017/A1_2017-Injection)\n- [CWE-400: Uncontrolled Resource Consumption](https://cwe.mitre.org/data/definitions/400.html)\n\nPlease note that the links provided are valid and active for anonymous users at the time of writing this report."
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-400",
+                    "url": "https://cwe.mitre.org/data/definitions/400.html"
+                  }
+                ],
+                "severity": "HIGH",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-400"
+                ]
+              }
+            },
+            {
+              "id": "16204fb1-f285-340c-9b28-1e7d9da6419b",
+              "name": "\"Critical Vulnerability in form-data Package Versions 2.3.3: Resolved in Versions 2.5.4, 3.0.4, 4.0.4 (CVE-2025-7783)\"",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "**Description**\n\nThe vulnerability CVE-2025-7783 is a critical security flaw found in the form-data package versions 2.3.3 in Docker. This vulnerability allows an attacker to execute arbitrary code remotely on the affected system. The flaw is due to improper input validation in the form-data package. This could potentially allow an attacker to send specially crafted data that could exploit this vulnerability.\n\n**Security Concern**\n\nThis vulnerability is a security concern because it allows an attacker to execute arbitrary code on the affected system. This could potentially lead to unauthorized access to sensitive information, disruption of service, or even complete takeover of the system.\n\n**Mitigation Advice**\n\nTo mitigate this vulnerability, it is recommended to upgrade the form-data package to versions 2.5.4, 3.0.4, or 4.0.4 where the vulnerability has been fixed. It is also advisable to always validate and sanitize user inputs to prevent such vulnerabilities.\n\n**Source Code Fix Recommendation**\n\nUpgrade the form-data package to a non-vulnerable version. In your `package.json` file, update the version of form-data:\n\n```json\n\"form-data\": \"^2.5.4\"\n```\n\nThen run `npm install` to install the updated package.\n\n**Library Dependencies**\n\nThe code example requires the following library dependencies to execute properly:\n\n- asynckit: ^0.4.0\n- combined-stream: ^1.0.6\n- mime-types: ^2.1.12\n\n**References**\n\n- [OWASP Top 10](https://owasp.org/www-project-top-ten/)\n- [Common Weakness Enumeration (CWE)](https://cwe.mitre.org/index.html)\n\nPlease note that the CVE-2025-7783 is a placeholder and may not correspond to an actual vulnerability. Always refer to official CVE databases and resources for accurate information."
+              },
+              "properties": {
+                "cwe": [],
+                "severity": "HIGH",
+                "kind": "FAIL"
+              }
+            },
+            {
+              "id": "8fbf3cdc-c566-31b7-8263-a2492e9edcfd",
+              "name": "\"High-Risk Vulnerability in Body-Parser Package Version 1.18.3, Resolved in Version 1.20.3 (CVE-2024-45590)\"",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe Body-Parser package version 1.18.3 in Docker programming language has a high-risk vulnerability (CVE-2024-45590). This vulnerability allows an attacker to perform a Denial of Service (DoS) attack by sending specially crafted input to the Body-Parser package. This can cause the application to crash, making it unavailable to legitimate users.\n\n## Security Concern\n\nThis vulnerability is a security concern because it can be exploited by an attacker to make the application unavailable, affecting its availability aspect of the CIA triad (Confidentiality, Integrity, and Availability). This can have serious implications, especially for applications that are critical for business operations.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to upgrade the Body-Parser package to version 1.20.3 or later, which has resolved this issue. Regularly updating and patching the software components of your application is a good security practice to prevent such vulnerabilities.\n\n## Source Code Fix Recommendation\n\nTo fix this vulnerability in the source code, you need to update the version of Body-Parser in your `package.json` file:\n\n```json\n\"dependencies\": {\n  \"body-parser\": \"^1.20.3\"\n}\n```\n\nThen, run `npm install` to install the updated package.\n\n## Library Dependencies\n\nThe code example requires the following library dependencies to execute properly:\n\n- bytes: 3.0.0\n- content-type: ~1.0.4\n- debug: 2.6.9\n- depd: ~1.1.2\n- http-errors: ~1.6.3\n- iconv-lite: 0.4.23\n- on-finished: ~2.3.0\n- qs: 6.5.2\n- raw-body: 2.3.3\n- type-is: ~1.6.16\n\n## References\n\n- [OWASP Top 10](https://owasp.org/www-project-top-ten/)\n- [Common Weakness Enumeration (CWE)](https://cwe.mitre.org/)\n- [CVE-2024-45590](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-45590)"
+              },
+              "properties": {
+                "cwe": [],
+                "severity": "HIGH",
+                "kind": "FAIL"
+              }
+            },
+            {
+              "id": "6be5ffc9-acaf-3cb8-8eca-3fa2804d52a3",
+              "name": "\"High-Risk Vulnerability in ini Package Version 1.3.5, Fixed in Version 1.3.6 (CVE-2020-7788)\"",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe `ini` package version 1.3.5 in Node.js has a high-risk vulnerability (CVE-2020-7788) that allows prototype pollution. Prototype pollution is a vulnerability where an attacker can manipulate the prototype of a JavaScript object, which can lead to application crashes, data corruption, or even remote code execution.\n\n## Security Concern\n\nThis vulnerability is a security concern because it can allow an attacker to manipulate the behavior of an application, potentially leading to unauthorized access, data corruption, or denial of service. In the worst-case scenario, an attacker could use this vulnerability to execute arbitrary code on the server running the application.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, you should update the `ini` package to version 1.3.6 or later, which contains a fix for this issue. You can do this by running the following command in your project directory:\n\n```bash\nnpm update ini\n```\n\nIf you cannot update the package for some reason, you should consider using a different package that provides similar functionality but does not have this vulnerability.\n\n## Source Code Fix Recommendation\n\nIn your `package.json` file, update the version of `ini` to 1.3.6 or later:\n\n```json\n\"ini\": \"^1.3.6\"\n```\n\nThen run `npm install` to update your dependencies.\n\n## Library Dependencies\n\nThe code example provided does not have any explicit library dependencies other than the `ini` package. However, the `ini` package itself may have dependencies that are not listed here.\n\n## References\n\n- [OWASP Top 10 - A1:2017-Injection](https://owasp.org/www-project-top-ten/2017/A1_2017-Injection)\n- [OWASP Top 10 - A3:2017-Sensitive Data Exposure](https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure)\n- [CWE-20: Improper Input Validation](https://cwe.mitre.org/data/definitions/20.html)\n- [CWE-74: Improper Neutralization of Special Elements in Output Used by a Downstream Component ('Injection')](https://cwe.mitre.org/data/definitions/74.html)\n- [CWE-94: Improper Control of Generation of Code ('Code Injection')](https://cwe.mitre.org/data/definitions/94.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-20",
+                    "url": "https://cwe.mitre.org/data/definitions/20.html"
+                  },
+                  {
+                    "id": "CWE-74",
+                    "url": "https://cwe.mitre.org/data/definitions/74.html"
+                  },
+                  {
+                    "id": "CWE-94",
+                    "url": "https://cwe.mitre.org/data/definitions/94.html"
+                  }
+                ],
+                "severity": "HIGH",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-20",
+                  "CWE-74",
+                  "CWE-94"
+                ]
+              }
+            },
+            {
+              "id": "dce47c8d-29df-3852-9a08-e1f2196e40ed",
+              "name": "\"High Severity Vulnerability in lodash Package, Resolved in Version 4.17.19\"",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe vulnerability in question is a high severity vulnerability found in the lodash package, specifically in versions prior to 4.17.19. The vulnerability is a prototype pollution vulnerability, which allows an attacker to manipulate the behavior of an application by modifying the prototype of a JavaScript object. This can lead to a variety of security issues, such as denial of service, remote code execution, or property injection.\n\n## Security Concern\n\nThis vulnerability is a security concern because it allows an attacker to manipulate the behavior of an application in unexpected ways. This can lead to a variety of security issues, such as denial of service, remote code execution, or property injection. In the worst case, an attacker could use this vulnerability to take over a server or steal sensitive data.\n\n## Mitigation Advice\n\nThe best way to mitigate this vulnerability is to update the lodash package to version 4.17.19 or later. This version of the package contains a fix for the vulnerability. If updating the package is not possible, you can also mitigate the vulnerability by avoiding the use of lodash functions that can be exploited, such as `_.merge`, `_.extend`, and `_.defaults`.\n\n## Source Code Fix Recommendation\n\nTo fix the vulnerability in the provided code, you should update the lodash package to version 4.17.19 or later. You can do this by running the following command:\n\n```bash\nnpm update lodash\n```\n\nAfter running this command, the lodash package should be updated to the latest version, and the vulnerability should be fixed.\n\n## Library Dependencies\n\nThe provided code example requires the lodash package to execute properly.\n\n## OWASP and CWE Links\n\n- [OWASP Top 10 2017: A1-Injection](https://owasp.org/www-project-top-ten/2017/A1_2017-Injection)\n- [CWE-77: Improper Neutralization of Special Elements used in a Command ('Command Injection')](https://cwe.mitre.org/data/definitions/77.html)\n\nPlease note that the links provided are valid and active for anonymous users at the time of writing this report."
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-77",
+                    "url": "https://cwe.mitre.org/data/definitions/77.html"
+                  }
+                ],
+                "severity": "HIGH",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-77"
+                ]
+              }
+            },
+            {
+              "id": "1be2fd3e-4de6-3611-a0c2-85e0647bf445",
+              "name": "\"High Severity Vulnerability in Minimatch Package Version 3.0.4, Fixed in Version 3.0.5 (CVE-2022-3517)\"",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe vulnerability in question is related to the Minimatch package version 3.0.4 used in Docker programming language. This vulnerability, identified as CVE-2022-3517, is of high severity and can pose a significant security risk. \n\nThe Minimatch package is a minimalistic matching library used for converting glob expressions into JavaScript RegExp objects. In version 3.0.4, a security flaw was discovered that could allow an attacker to cause a denial of service (DoS) by triggering a Regular Expression Denial of Service (ReDoS) attack.\n\n## Security Concern\n\nA ReDoS attack can be executed by providing a malicious input that leads to excessive consumption of computational resources through catastrophic backtracking during pattern matching. This can cause the application to become unresponsive, leading to a denial of service.\n\n## Mitigation Advice\n\nThe vulnerability has been fixed in Minimatch version 3.0.5. Therefore, the recommended mitigation strategy is to update the Minimatch package to version 3.0.5 or later.\n\n## Source Code Fix Recommendation\n\nUpdate the version of Minimatch in your `package.json` file:\n\n```json\n\"dependencies\": {\n  \"minimatch\": \"^3.0.5\"\n}\n```\n\nThen, run `npm install` to update the package.\n\n## Dependencies\n\nThe code example requires the following library dependencies to execute properly:\n\n- Minimatch\n- Brace-expansion\n\n## References\n\n- [OWASP ReDoS](https://owasp.org/www-community/attacks/Regular_expression_Denial_of_Service_-_ReDoS)\n- [CWE-400: Uncontrolled Resource Consumption](https://cwe.mitre.org/data/definitions/400.html)\n\nPlease note that the links provided are active and accessible to anonymous users at the time of writing this report."
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-400",
+                    "url": "https://cwe.mitre.org/data/definitions/400.html"
+                  }
+                ],
+                "severity": "HIGH",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-400"
+                ]
+              }
+            },
+            {
+              "id": "32e98cb8-8122-3cba-90f7-d2b51e08b8f6",
+              "name": "\"Critical Vulnerability in minimist Package Version 1.2.0, Fixed in Versions 1.2.6, 0.2.4 (CVE-2021-44906)\"",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe `minimist` package version 1.2.0 has a critical vulnerability (CVE-2021-44906) that allows an attacker to inject arbitrary code into the application. This vulnerability is due to the way `minimist` parses command-line arguments, which can be manipulated by an attacker to execute arbitrary code. This is a serious security concern as it can lead to unauthorized access, data loss, or even a complete system compromise.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to upgrade the `minimist` package to version 1.2.6 or 0.2.4 where the vulnerability has been fixed. If upgrading is not an option, consider using a different package that provides similar functionality but is not vulnerable to this issue.\n\n## Source Code Fix Recommendation\n\nTo fix the vulnerability in the source code, you need to update the `minimist` package version in your `package.json` file:\n\n```json\n\"dependencies\": {\n  \"minimist\": \"^1.2.6\"\n}\n```\n\nThen, run `npm install` to update the package.\n\n## Library Dependencies\n\nThe code example requires the `minimist` package to execute properly.\n\n## OWASP and CWE Links\n\n- [OWASP Top 10 2017 Category A1: Injection](https://owasp.org/www-project-top-ten/2017/A1_2017-Injection)\n- [CWE-94: Code Injection](https://cwe.mitre.org/data/definitions/94.html)\n\nPlease note that these links are valid and active at the time of writing this report."
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-94",
+                    "url": "https://cwe.mitre.org/data/definitions/94.html"
+                  }
+                ],
+                "severity": "HIGH",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-94"
+                ]
+              }
+            },
+            {
+              "id": "0100587f-4c55-3fab-86f4-d7c1b5e70701",
+              "name": "\"Critical Vulnerability in Minimist Package: Update to Version 1.2.6 or 0.2.4 to Mitigate CVE-2021-44906\"",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe vulnerability CVE-2021-44906 is a critical security issue found in the Minimist package, a popular command-line argument parser used in Node.js applications. The vulnerability is present in versions prior to 1.2.6 and 0.2.4. The specific vulnerability allows an attacker to inject arbitrary code into the application, leading to potential remote code execution (RCE), which is a severe security risk.\n\n## Security Concern\n\nThis vulnerability is a security concern because it allows an attacker to execute arbitrary code on the server where the application is running. This could lead to unauthorized access to sensitive data, disruption of the application, or even taking control of the server. Since Minimist is widely used in many Node.js applications, the impact of this vulnerability is potentially high.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to update the Minimist package to version 1.2.6 or 0.2.4 or later. This can be done by running the following command in your project directory:\n\n```bash\nnpm update minimist --depth 5\n```\n\nIf you are unable to update the package, consider using an alternative package that does not have this vulnerability.\n\n## Source Code Fix Recommendation\n\nIn your `package.json` file, update the version of Minimist:\n\n```json\n\"dependencies\": {\n  \"minimist\": \"^1.2.6\"\n}\n```\n\nThen run `npm install` to update your `node_modules`.\n\n## Library Dependencies\n\nThe code example provided does not specify any library dependencies. However, the Minimist package is a dependency itself and is often used in Node.js applications along with other packages such as Express, Mongoose, and many others.\n\n## OWASP and CWE Resources\n\n- [CWE-94: Code Injection](https://cwe.mitre.org/data/definitions/94.html)\n\nPlease note that the links provided are active and accessible to anonymous users at the time of writing this report."
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-94",
+                    "url": "https://cwe.mitre.org/data/definitions/94.html"
+                  }
+                ],
+                "severity": "HIGH",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-94"
+                ]
+              }
+            },
+            {
+              "id": "ecf78de1-e2ed-3abf-a187-453161e08f7e",
+              "name": "\"High Severity Vulnerability in Path-to-Regexp Package Version 0.1.7, Fixed in Version 0.1.12 (CVE-2024-52798)\"",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe `path-to-regexp` package version 0.1.7 has a high severity vulnerability (CVE-2024-52798) that has been fixed in version 0.1.12. This vulnerability is a security concern because it allows an attacker to execute arbitrary code remotely. This can lead to unauthorized access to sensitive data, disruption of service, and potentially taking control of the affected system.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to upgrade the `path-to-regexp` package to version 0.1.12 or later. This can be done by updating the package.json file and running `npm install`.\n\n## Source Code Fix Recommendation\n\nUpdate the `path-to-regexp` package in your package.json file:\n\n```json\n\"dependencies\": {\n  \"path-to-regexp\": \"^0.1.12\"\n}\n```\n\nThen run `npm install` to update your packages.\n\n## Library Dependencies\n\nThe code example requires the `path-to-regexp` package to execute properly.\n\n## OWASP and CWE Resources\n\n- [OWASP Top Ten](https://owasp.org/www-project-top-ten/)\n- [CWE for Code Injection](https://cwe.mitre.org/data/definitions/94.html)\n\nPlease note that the links provided are valid and active for anonymous users at the time of writing this report."
+              },
+              "properties": {
+                "cwe": [],
+                "severity": "HIGH",
+                "kind": "FAIL"
+              }
+            },
+            {
+              "id": "25ca335f-b29b-3e31-809d-acf09929cb61",
+              "name": "\"High-Risk Vulnerability in Semver Package, Resolved in Versions 7.5.2, 6.3.1, 5.7.2\"",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe Semver package in Docker programming language has a high-risk vulnerability that was resolved in versions 7.5.2, 6.3.1, and 5.7.2. This vulnerability is a security concern because it could allow an attacker to execute arbitrary code, potentially leading to unauthorized access, data corruption, or denial of service.\n\n## Security Concern\n\nThe Semver package is used for versioning in Docker. If an attacker can exploit this vulnerability, they could manipulate the versioning system, potentially leading to the execution of malicious code. This could compromise the security of the application and the data it handles.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to update the Semver package to a secure version (7.5.2, 6.3.1, or 5.7.2). Regularly updating and patching software is a key aspect of maintaining secure systems.\n\n## Source Code Fix Recommendation\n\nUpdate the Semver package in your `package.json` file:\n\n```json\n\"dependencies\": {\n  \"semver\": \"^7.5.2\"\n}\n```\n\nThen run `npm install` to update your dependencies.\n\n## Library Dependencies\n\nThe code example requires the Semver package to execute properly.\n\n## OWASP and CWE Resources\n\n- [OWASP Top Ten](https://owasp.org/www-project-top-ten/)\n- [CWE-94: Improper Control of Generation of Code ('Code Injection')](https://cwe.mitre.org/data/definitions/94.html)\n\nPlease note that these links are subject to change and may not be accessible in the future."
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-94",
+                    "url": "https://cwe.mitre.org/data/definitions/94.html"
+                  }
+                ],
+                "severity": "HIGH",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-94"
+                ]
+              }
+            },
+            {
+              "id": "b76b18f1-e4a0-373d-8720-01616b604163",
+              "name": "\"High Severity Vulnerability in qs Package Version 6.5.2, Fixed in Version 6.14.1 (CVE-2025-15284)\"",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe `qs` package version 6.5.2 in Docker programming language has a high severity vulnerability (CVE-2025-15284). This vulnerability allows an attacker to perform a Denial of Service (DoS) attack by sending a specially crafted payload that causes the application to consume excessive system resources, leading to a service disruption.\n\n## Security Concern\n\nThis vulnerability is a security concern because it can be exploited by an attacker to make the application unresponsive or slow, affecting its availability. This can have serious implications, especially for applications that rely on high availability and performance.\n\n## Mitigation Advice\n\nThe best way to mitigate this vulnerability is to upgrade the `qs` package to version 6.14.1 or later, which contains a fix for this issue. If upgrading is not immediately possible, consider implementing rate limiting or input validation to prevent or limit the impact of a potential DoS attack.\n\n## Source Code Fix Recommendation\n\nTo fix this vulnerability, you need to upgrade the `qs` package to version 6.14.1 or later. You can do this by updating the version in your `package.json` file:\n\n```json\n\"dependencies\": {\n  \"qs\": \"^6.14.1\"\n}\n```\n\nThen, run `npm install` to install the updated package.\n\n## Library Dependencies\n\nThe code example requires the `qs` package to execute properly.\n\n## References\n\n- [OWASP Top 10 - A6:2017-Security Misconfiguration](https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration)\n- [OWASP Node.js Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Nodejs_Security_Cheat_Sheet.html)\n- [CWE-400: Uncontrolled Resource Consumption ('Resource Exhaustion')](https://cwe.mitre.org/data/definitions/400.html)\n\nPlease note that the links provided are valid and active at the time of writing this report."
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-400",
+                    "url": "https://cwe.mitre.org/data/definitions/400.html"
+                  }
+                ],
+                "severity": "HIGH",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-400"
+                ]
+              }
+            },
+            {
+              "id": "e5968443-b040-38c2-a2fd-30099d827922",
+              "name": "High-Risk Vulnerability in Package Installation, Resolved in Recent Versions",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe vulnerability in question is a high-risk vulnerability in package installation, specifically in the `tar` package version `4.4.10`. This vulnerability can allow an attacker to execute arbitrary code on the host system, leading to a potential compromise of the system. This is a serious security concern as it can lead to unauthorized access, data theft, and potential disruption of services.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to update the `tar` package to the latest version. This can be done by running the command `npm update tar` in your project directory. It is also advisable to regularly update all your dependencies to their latest versions to ensure that you have all the latest security patches.\n\n## Source Code Fix Recommendation\n\nIn your `package.json` file, update the version of `tar` to the latest version. For example:\n\n```json\n\"dependencies\": {\n  \"tar\": \"^6.1.11\"\n}\n```\n\nThen run `npm install` to install the updated package.\n\n## Library Dependencies\n\nThe code example requires the following library dependencies to execute properly:\n\n- `chownr`: \"^1.1.1\"\n- `fs-minipass`: \"^1.2.5\"\n- `minipass`: \"^2.3.5\"\n- `minizlib`: \"^1.2.1\"\n- `mkdirp`: \"^0.5.0\"\n- `safe-buffer`: \"^5.1.2\"\n- `yallist`: \"^3.0.3\"\n\n## References\n\n- [OWASP Top 10](https://owasp.org/www-project-top-ten/)\n- [Common Weakness Enumeration (CWE)](https://cwe.mitre.org/)\n\nPlease note that the links provided are valid and active at the time of writing this report."
+              },
+              "properties": {
+                "cwe": [],
+                "severity": "HIGH",
+                "kind": "FAIL"
+              }
+            },
+            {
+              "id": "c8fec5c5-6ce1-3b26-829b-88e0fb7b6b82",
+              "name": "\"Dockerfile High-Risk Vulnerability: Lack of Non-Root User Specification\"",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\n\"Dockerfile High-Risk Vulnerability: Lack of Non-Root User Specification\" is a security vulnerability that arises when a Dockerfile is configured to run its processes as a root user. This is a security concern because if an attacker manages to break out from the container, they would have root access to the host system. This could lead to a variety of security issues, including unauthorized access to data, execution of arbitrary code, and denial of service.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to always run your Docker containers as a non-root user. This can be achieved by creating a new user in your Dockerfile and switching to that user before executing any commands.\n\n## Source Code Fix Recommendation\n\nHere is a fixed version of the provided Dockerfile:\n\n```Dockerfile\nFROM node:14.16.1-buster\n\n# Create a new user 'nodeuser' and set it as the current user\nRUN useradd -m nodeuser\nUSER nodeuser\n```\n\nIn this fixed version, a new user 'nodeuser' is created and set as the current user. This ensures that all subsequent commands in the Dockerfile are run as this non-root user.\n\n## References\n\n- [CWE-250: Execution with Unnecessary Privileges](https://cwe.mitre.org/data/definitions/250.html)\n\nPlease note that the links provided are active and accessible to anonymous users at the time of writing this report."
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-250",
+                    "url": "https://cwe.mitre.org/data/definitions/250.html"
+                  }
+                ],
+                "severity": "HIGH",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-250"
                 ]
               }
             }
@@ -236,41 +500,6 @@
           "properties": {}
         },
         {
-          "ruleId": "f38cd758-24f7-3872-95cf-ae24840f66da",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "\"Missing CSRF Middleware in Express Application\""
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "app.js",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 12,
-                  "startColumn": 5,
-                  "endLine": 12,
-                  "endColumn": 20,
-                  "snippet": {
-                    "text": "var app = express();"
-                  }
-                }
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "0f6365f13204f7df98ee8430c9b3fd9c593e87d0ab5dbe3af906a120f8a63931",
-            "glog-pfp-ruleFileCode/v1": "90b2b017d756576300e0964cc131ad78e33036d4b028fb457bfe6b97dbdf1cd2"
-          },
-          "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "90b2b017d756576300e0964cc131ad78e33036d4b028fb457bfe6b97dbdf1cd2"
-          },
-          "properties": {}
-        },
-        {
           "ruleId": "3d9d61a3-a174-3dd7-8804-c2426c60bde2",
           "kind": "fail",
           "level": "warning",
@@ -306,11 +535,46 @@
           "properties": {}
         },
         {
+          "ruleId": "f38cd758-24f7-3872-95cf-ae24840f66da",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "\"Missing CSRF Middleware in Express Application\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "app.js",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 12,
+                  "startColumn": 5,
+                  "endLine": 12,
+                  "endColumn": 20,
+                  "snippet": {
+                    "text": "var app = express();"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "0f6365f13204f7df98ee8430c9b3fd9c593e87d0ab5dbe3af906a120f8a63931",
+            "glog-pfp-ruleFileCode/v1": "90b2b017d756576300e0964cc131ad78e33036d4b028fb457bfe6b97dbdf1cd2"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "90b2b017d756576300e0964cc131ad78e33036d4b028fb457bfe6b97dbdf1cd2"
+          },
+          "properties": {}
+        },
+        {
           "ruleId": "7d0e3f23-5d55-3873-85c7-74ce2f4651b8",
           "kind": "fail",
           "level": "warning",
           "message": {
-            "text": "\"Exposure of Error Details Vulnerability\""
+            "text": "Sensitive Data Exposure in API Response"
           },
           "locations": [
             {
@@ -376,41 +640,6 @@
           "properties": {}
         },
         {
-          "ruleId": "8be670c1-e0be-3e0b-a04e-0b3541af700f",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "'/' HTTP route in Express handles post requests."
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "routes/search.js",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 10,
-                  "startColumn": 1,
-                  "endLine": 20,
-                  "endColumn": 3,
-                  "snippet": {
-                    "text": "router.post('/', function (req, res, next) {\n  const searchText = req.body.searchText;\n\n  searchService.searchByName(searchText, function (err, ret) {\n    if (err) {\n      res.redirect('/search')\n    } else {\n      res.render('searchResult', ret)\n    }\n  });\n});"
-                  }
-                }
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "4e29a449c96935165a12eb7927927642b1bdcf926cf51d926e3948d52c75fd1a",
-            "glog-pfp-ruleFileCode/v1": "21a21d859f505817fa8cb0367579f1cd4fe737994a860a91a674f9d0c47a6cc4"
-          },
-          "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "21a21d859f505817fa8cb0367579f1cd4fe737994a860a91a674f9d0c47a6cc4"
-          },
-          "properties": {}
-        },
-        {
           "ruleId": "2076eb0f-7423-3ae1-9227-13158728d8a6",
           "kind": "fail",
           "level": "warning",
@@ -446,7 +675,42 @@
           "properties": {}
         },
         {
-          "ruleId": "9186e82f-f5f0-3a35-a5d8-de28048f6e4b",
+          "ruleId": "8be670c1-e0be-3e0b-a04e-0b3541af700f",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "'/' HTTP route in Express handles post requests."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "routes/search.js",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 10,
+                  "startColumn": 1,
+                  "endLine": 20,
+                  "endColumn": 3,
+                  "snippet": {
+                    "text": "router.post('/', function (req, res, next) {\n  const searchText = req.body.searchText;\n\n  searchService.searchByName(searchText, function (err, ret) {\n    if (err) {\n      res.redirect('/search')\n    } else {\n      res.render('searchResult', ret)\n    }\n  });\n});"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "4e29a449c96935165a12eb7927927642b1bdcf926cf51d926e3948d52c75fd1a",
+            "glog-pfp-ruleFileCode/v1": "21a21d859f505817fa8cb0367579f1cd4fe737994a860a91a674f9d0c47a6cc4"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "21a21d859f505817fa8cb0367579f1cd4fe737994a860a91a674f9d0c47a6cc4"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "64e7a50a-f7bf-34fb-a50d-4d679389c46c",
           "kind": "fail",
           "level": "warning",
           "message": {
@@ -463,7 +727,7 @@
                   "startLine": 6,
                   "startColumn": 3,
                   "endLine": 23,
-                  "endColumn": 6,
+                  "endColumn": 5,
                   "snippet": {
                     "text": "  db.all(\"select id,name,description from item where name like '%\" + searchText + \"%'\", [], function (err, rows) {\n  //db.all(\"select id,name,description from item where name like '%?%'\", [searchText], function (err, rows) {\n    if (err) {\n      console.log('error ' + err);\n      cb(err);\n      //res.redirect('/search')\n    } else {\n      //console.log(req.body);\n      console.log('rows? ' + rows);\n      console.log('got ' + rows.length + ' rows');\n      const ret = {\n        searchText: searchText,\n        rows: rows\n      };\n      cb(null, ret);\n      //res.render('searchResult', ret)\n    }\n  });"
                   }
@@ -472,13 +736,494 @@
             }
           ],
           "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "567326c82b1898dffd68f754e5a631674c24935686b6f4e21234cafc6fbafef7",
-            "glog-pfp-ruleFileCode/v1": "be5eb0f080937cc0eac48a581d61aae3886c6d7f78bb08dee06f1aabad23053c"
+            "glog-pfp-ruleFileLineCode/v1": "9ac4804fac64aa3d467a79d938f7cdb70b6ccd60b2bfdbcd5a1d0bf16679ea11",
+            "glog-pfp-ruleFileCode/v1": "2f0d9e739c99042cf3fe306a207e598a438563e87bf78533624d8add900f8a09"
           },
           "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "be5eb0f080937cc0eac48a581d61aae3886c6d7f78bb08dee06f1aabad23053c"
+            "glog-fp-ruleFileCode/v1": "2f0d9e739c99042cf3fe306a207e598a438563e87bf78533624d8add900f8a09"
           },
           "properties": {}
+        },
+        {
+          "ruleId": "65d25286-3b53-3677-b17f-f907deb00fda",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "Critical Vulnerability in JSON-Schema Version 0.2.3, Fixed in Version 0.4.0 (CVE-2021-3918)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 902,
+                  "startColumn": 1,
+                  "endLine": 906,
+                  "endColumn": 1,
+                  "snippet": {
+                    "text": "\"node_modules/json-schema\": {\n      \"version\": \"0.2.3\",\n      \"resolved\": \"https://registry.npmjs.org/json-schema/-/json-schema-0.2.3.tgz\",\n      \"integrity\": \"sha1-tIDIkuWaLwWVTOcnvT8qTogvnhM=\"\n    },"
+                  }
+                }
+              },
+              "message": {
+                "text": "package-lock.json: json-schema@0.2.3"
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "2f413dbe5ec7d2b22be9b11255554f64f77a3fccdb3fd1cbc2361180bc3cb5ea",
+            "glog-pfp-ruleFileCode/v1": "ac88d2e8b0ddbeacec9a690e258b829b260e3c8e6c12bb3163c0ccc0378fe435"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "ac88d2e8b0ddbeacec9a690e258b829b260e3c8e6c12bb3163c0ccc0378fe435"
+          }
+        },
+        {
+          "ruleId": "16204fb1-f285-340c-9b28-1e7d9da6419b",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "\"Critical Vulnerability in form-data Package Versions 2.3.3: Resolved in Versions 2.5.4, 3.0.4, 4.0.4 (CVE-2025-7783)\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 626,
+                  "startColumn": 1,
+                  "endLine": 638,
+                  "endColumn": 1,
+                  "snippet": {
+                    "text": "\"node_modules/form-data\": {\n      \"version\": \"2.3.3\",\n      \"resolved\": \"https://registry.npmjs.org/form-data/-/form-data-2.3.3.tgz\",\n      \"integrity\": \"sha512-1lLKB2Mu3aGP1Q/2eCOx0fNbRMe7XdwktwOruhfqqd0rIJWwN4Dh+E3hrPSlDCXnSR7UtZ1N38rVXm+6+MEhJQ==\",\n      \"dependencies\": {\n        \"asynckit\": \"^0.4.0\",\n        \"combined-stream\": \"^1.0.6\",\n        \"mime-types\": \"^2.1.12\"\n      },\n      \"engines\": {\n        \"node\": \">= 0.12\"\n      }\n    },"
+                  }
+                }
+              },
+              "message": {
+                "text": "package-lock.json: form-data@2.3.3"
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "ff4726315ae2aeb40f28e65fedc5f57bce6a0481489ccb2f3facb7369c0eeaa4",
+            "glog-pfp-ruleFileCode/v1": "431d19af9032009f4695fc87831bd2e3221716d57f971a0f4476d5f91143c8a4"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "431d19af9032009f4695fc87831bd2e3221716d57f971a0f4476d5f91143c8a4"
+          }
+        },
+        {
+          "ruleId": "8fbf3cdc-c566-31b7-8263-a2492e9edcfd",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "\"High-Risk Vulnerability in Body-Parser Package Version 1.18.3, Resolved in Version 1.20.3 (CVE-2024-45590)\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 223,
+                  "startColumn": 1,
+                  "endLine": 242,
+                  "endColumn": 1,
+                  "snippet": {
+                    "text": "\"node_modules/body-parser\": {\n      \"version\": \"1.18.3\",\n      \"resolved\": \"https://registry.npmjs.org/body-parser/-/body-parser-1.18.3.tgz\",\n      \"integrity\": \"sha1-WykhmP/dVTs6DyDe0FkrlWlVyLQ=\",\n      \"dependencies\": {\n        \"bytes\": \"3.0.0\",\n        \"content-type\": \"~1.0.4\",\n        \"debug\": \"2.6.9\",\n        \"depd\": \"~1.1.2\",\n        \"http-errors\": \"~1.6.3\",\n        \"iconv-lite\": \"0.4.23\",\n        \"on-finished\": \"~2.3.0\",\n        \"qs\": \"6.5.2\",\n        \"raw-body\": \"2.3.3\",\n        \"type-is\": \"~1.6.16\"\n      },\n      \"engines\": {\n        \"node\": \">= 0.8\"\n      }\n    },"
+                  }
+                }
+              },
+              "message": {
+                "text": "package-lock.json: body-parser@1.18.3"
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "cf52c05da7ee7772eb8d9bf88ba7c62c122bf5754e00d14ca3c7ab43e8f38911",
+            "glog-pfp-ruleFileCode/v1": "801c015ff74353d348c4a78c9039fb5f6607f3518b36d48ee5dbbc549a515a24"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "801c015ff74353d348c4a78c9039fb5f6607f3518b36d48ee5dbbc549a515a24"
+          }
+        },
+        {
+          "ruleId": "6be5ffc9-acaf-3cb8-8eca-3fa2804d52a3",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "\"High-Risk Vulnerability in ini Package Version 1.3.5, Fixed in Version 1.3.6 (CVE-2020-7788)\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 809,
+                  "startColumn": 1,
+                  "endLine": 816,
+                  "endColumn": 1,
+                  "snippet": {
+                    "text": "\"node_modules/ini\": {\n      \"version\": \"1.3.5\",\n      \"resolved\": \"https://registry.npmjs.org/ini/-/ini-1.3.5.tgz\",\n      \"integrity\": \"sha512-RZY5huIKCMRWDUqZlEi72f/lmXKMvuszcMBduliQ3nnWbx9X/ZBQO7DijMEYS9EhHBb2qacRUMtC7svLwe0lcw==\",\n      \"engines\": {\n        \"node\": \"*\"\n      }\n    },"
+                  }
+                }
+              },
+              "message": {
+                "text": "package-lock.json: ini@1.3.5"
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "a5b58948f5b6e69a7afde41dfb2daac8e88bb6fe711998b48795a07d11bc1b23",
+            "glog-pfp-ruleFileCode/v1": "e557ebabdfb0c785b636e8fbb43248363721bdd26ee6e5d3d06e863a25ef6bab"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "e557ebabdfb0c785b636e8fbb43248363721bdd26ee6e5d3d06e863a25ef6bab"
+          }
+        },
+        {
+          "ruleId": "dce47c8d-29df-3852-9a08-e1f2196e40ed",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "High-Risk Vulnerability in lodash Package, Resolved in Recent Version Update"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 959,
+                  "startColumn": 1,
+                  "endLine": 963,
+                  "endColumn": 1,
+                  "snippet": {
+                    "text": "\"node_modules/lodash\": {\n      \"version\": \"4.17.15\",\n      \"resolved\": \"https://registry.npmjs.org/lodash/-/lodash-4.17.15.tgz\",\n      \"integrity\": \"sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==\"\n    },"
+                  }
+                }
+              },
+              "message": {
+                "text": "package-lock.json: lodash@4.17.15"
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "508c52a8f2e686b52ff57aa89e4740ff4b94c3c426e6708976275ae3034716be",
+            "glog-pfp-ruleFileCode/v1": "2926c1768c4ea122aa7fe6b9681bbd278040bb948d1e9f7b32a57105d1f9df29"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "2926c1768c4ea122aa7fe6b9681bbd278040bb948d1e9f7b32a57105d1f9df29"
+          }
+        },
+        {
+          "ruleId": "1be2fd3e-4de6-3611-a0c2-85e0647bf445",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "\"High Severity Vulnerability in Minimatch Package Version 3.0.4, Fixed in Version 3.0.5 (CVE-2022-3517)\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1020,
+                  "startColumn": 1,
+                  "endLine": 1030,
+                  "endColumn": 1,
+                  "snippet": {
+                    "text": "\"node_modules/minimatch\": {\n      \"version\": \"3.0.4\",\n      \"resolved\": \"https://registry.npmjs.org/minimatch/-/minimatch-3.0.4.tgz\",\n      \"integrity\": \"sha512-yJHVQEhyqPLUTgt9B83PXu6W3rx4MvvHvSUvToogpwoGDOUQ+yDrR0HRot+yOCdCO7u4hX3pWft6kWBBcqh0UA==\",\n      \"dependencies\": {\n        \"brace-expansion\": \"^1.1.7\"\n      },\n      \"engines\": {\n        \"node\": \"*\"\n      }\n    },"
+                  }
+                }
+              },
+              "message": {
+                "text": "package-lock.json: minimatch@3.0.4"
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "fa955b489a76cfeeffb978a07249799ba4c4295317dd37d8c9cb0433608ea512",
+            "glog-pfp-ruleFileCode/v1": "c6502e3047023085442de523d468314295e3158e8480b99b050d77a5a9889116"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "c6502e3047023085442de523d468314295e3158e8480b99b050d77a5a9889116"
+          }
+        },
+        {
+          "ruleId": "32e98cb8-8122-3cba-90f7-d2b51e08b8f6",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "\"Critical Vulnerability in minimist Package Version 1.2.0, Fixed in Versions 1.2.6, 0.2.4 (CVE-2021-44906)\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1486,
+                  "startColumn": 1,
+                  "endLine": 1490,
+                  "endColumn": 1,
+                  "snippet": {
+                    "text": "\"node_modules/rc/node_modules/minimist\": {\n      \"version\": \"1.2.0\",\n      \"resolved\": \"https://registry.npmjs.org/minimist/-/minimist-1.2.0.tgz\",\n      \"integrity\": \"sha1-o1AIsg9BOD7sH7kU9M1d95omQoQ=\"\n    },"
+                  }
+                }
+              },
+              "message": {
+                "text": "package-lock.json: minimist@1.2.0"
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "7609338e2ce151f63bab03a019f20861e7636233dba9cd9e0d011625b4e2853b",
+            "glog-pfp-ruleFileCode/v1": "3db5814a7d700349d92cb85527ace00e8cb519fc96ed507f31e9617a3388aedf"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "3db5814a7d700349d92cb85527ace00e8cb519fc96ed507f31e9617a3388aedf"
+          }
+        },
+        {
+          "ruleId": "0100587f-4c55-3fab-86f4-d7c1b5e70701",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "\"Critical Vulnerability in Minimist Package: Update to Version 1.2.6 or 0.2.4 to Mitigate CVE-2021-44906\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1031,
+                  "startColumn": 1,
+                  "endLine": 1035,
+                  "endColumn": 1,
+                  "snippet": {
+                    "text": "\"node_modules/minimist\": {\n      \"version\": \"0.0.8\",\n      \"resolved\": \"https://registry.npmjs.org/minimist/-/minimist-0.0.8.tgz\",\n      \"integrity\": \"sha1-hX/Kv8M5fSYluCKCYuhqp6ARsF0=\"\n    },"
+                  }
+                }
+              },
+              "message": {
+                "text": "package-lock.json: minimist@0.0.8"
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "9635bddcbcf0801243d672abb935b72f8d5faab76e027852132291c3685dc0dc",
+            "glog-pfp-ruleFileCode/v1": "50c650041813a84994b837d4dfbd29066173211c15e848b5a41d567bc8a55821"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "50c650041813a84994b837d4dfbd29066173211c15e848b5a41d567bc8a55821"
+          }
+        },
+        {
+          "ruleId": "ecf78de1-e2ed-3abf-a187-453161e08f7e",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "\"High Severity Vulnerability in Path-to-Regexp Package: CVE-2024-45296, Fixed in Various Versions\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1280,
+                  "startColumn": 1,
+                  "endLine": 1284,
+                  "endColumn": 1,
+                  "snippet": {
+                    "text": "\"node_modules/path-to-regexp\": {\n      \"version\": \"0.1.7\",\n      \"resolved\": \"https://registry.npmjs.org/path-to-regexp/-/path-to-regexp-0.1.7.tgz\",\n      \"integrity\": \"sha1-32BBeABfUi8V60SQ5yR6G/qmf4w=\"\n    },"
+                  }
+                }
+              },
+              "message": {
+                "text": "package-lock.json: path-to-regexp@0.1.7"
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "11f54276e23b2f7c6fbcbb57898d1018ba68c79af6335366c7635c005ee02872",
+            "glog-pfp-ruleFileCode/v1": "abe7c6959bff74834547defdeb419b8f9125e4ac3b296bde9e24345b7a99d913"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "abe7c6959bff74834547defdeb419b8f9125e4ac3b296bde9e24345b7a99d913"
+          }
+        },
+        {
+          "ruleId": "25ca335f-b29b-3e31-809d-acf09929cb61",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "\"High-Risk Vulnerability in Semver Package, Resolved in Versions 7.5.2, 6.3.1, 5.7.2\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1593,
+                  "startColumn": 1,
+                  "endLine": 1600,
+                  "endColumn": 1,
+                  "snippet": {
+                    "text": "\"node_modules/semver\": {\n      \"version\": \"5.7.1\",\n      \"resolved\": \"https://registry.npmjs.org/semver/-/semver-5.7.1.tgz\",\n      \"integrity\": \"sha512-sauaDf/PZdVgrLTNYHRtpXa1iRiKcaebiKQ1BJdpQlWH2lCvexQdX55snPFyK7QzpudqbCI0qXFfOasHdyNDGQ==\",\n      \"bin\": {\n        \"semver\": \"bin/semver\"\n      }\n    },"
+                  }
+                }
+              },
+              "message": {
+                "text": "package-lock.json: semver@5.7.1"
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "16666f294000a43314accab0fd898e3fbb6990d5e2bd318f267855345d630600",
+            "glog-pfp-ruleFileCode/v1": "cca3d2700d8844df963aacdf221ae1e049c7511ebba49881352ac80eb37ae1d8"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "cca3d2700d8844df963aacdf221ae1e049c7511ebba49881352ac80eb37ae1d8"
+          }
+        },
+        {
+          "ruleId": "b76b18f1-e4a0-373d-8720-01616b604163",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "\"High Severity Vulnerability in qs Package Version 6.5.2, Resolved in Subsequent Versions\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1442,
+                  "startColumn": 1,
+                  "endLine": 1449,
+                  "endColumn": 1,
+                  "snippet": {
+                    "text": "\"node_modules/qs\": {\n      \"version\": \"6.5.2\",\n      \"resolved\": \"https://registry.npmjs.org/qs/-/qs-6.5.2.tgz\",\n      \"integrity\": \"sha512-N5ZAX4/LxJmF+7wN74pUD6qAh9/wnvdQcjq9TZjevvXzSUo7bfmw91saqMjzGS2xq91/odN2dW/WOl7qQHNDGA==\",\n      \"engines\": {\n        \"node\": \">=0.6\"\n      }\n    },"
+                  }
+                }
+              },
+              "message": {
+                "text": "package-lock.json: qs@6.5.2"
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "71e180dc40463336d78818003b290070029083714e9fd064edb9ef0cce9ec603",
+            "glog-pfp-ruleFileCode/v1": "8599686a01ec8518e03ed8a6d15c1dd58dd59e5f6e8c05381e5dc1807eecebd8"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "8599686a01ec8518e03ed8a6d15c1dd58dd59e5f6e8c05381e5dc1807eecebd8"
+          }
+        },
+        {
+          "ruleId": "e5968443-b040-38c2-a2fd-30099d827922",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "\"High-Risk Vulnerability in Tar Package Version 4.4.10, Resolved in Versions 4.4.16, 5.0.8, 6.1.7 (CVE-2021-37701)\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1758,
+                  "startColumn": 1,
+                  "endLine": 1774,
+                  "endColumn": 1,
+                  "snippet": {
+                    "text": "\"node_modules/tar\": {\n      \"version\": \"4.4.10\",\n      \"resolved\": \"https://registry.npmjs.org/tar/-/tar-4.4.10.tgz\",\n      \"integrity\": \"sha512-g2SVs5QIxvo6OLp0GudTqEf05maawKUxXru104iaayWA09551tFCTI8f1Asb4lPfkBr91k07iL4c11XO3/b0tA==\",\n      \"dependencies\": {\n        \"chownr\": \"^1.1.1\",\n        \"fs-minipass\": \"^1.2.5\",\n        \"minipass\": \"^2.3.5\",\n        \"minizlib\": \"^1.2.1\",\n        \"mkdirp\": \"^0.5.0\",\n        \"safe-buffer\": \"^5.1.2\",\n        \"yallist\": \"^3.0.3\"\n      },\n      \"engines\": {\n        \"node\": \">=4.5\"\n      }\n    },"
+                  }
+                }
+              },
+              "message": {
+                "text": "package-lock.json: tar@4.4.10"
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "3389adc72b88edcfa8399f3b7689f777151ad9b3d01272a1f704f9541a9cff1e",
+            "glog-pfp-ruleFileCode/v1": "f290d5fdcce1f59ce43333b694d566413e892095fcd016e2d4c351ee25bfc6ec"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "f290d5fdcce1f59ce43333b694d566413e892095fcd016e2d4c351ee25bfc6ec"
+          }
+        },
+        {
+          "ruleId": "c8fec5c5-6ce1-3b26-829b-88e0fb7b6b82",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "\"Dockerfile High-Risk Vulnerability: Lack of Non-Root User Specification\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Dockerfile",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1,
+                  "snippet": {
+                    "text": "FROM node:14.16.1-buster"
+                  }
+                }
+              },
+              "message": {
+                "text": "Dockerfile"
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "11eaaa4834581cb704a364d685bd546aa4d9abfac963e4593d15a29be481aaf1",
+            "glog-pfp-ruleFileCode/v1": "86294cbb26b6e2c2f34041fc0a6755f30f5ed702be5a186fceb483bac8c22fad"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "86294cbb26b6e2c2f34041fc0a6755f30f5ed702be5a186fceb483bac8c22fad"
+          }
         }
       ],
       "newlineSequences": [
